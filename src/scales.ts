@@ -1,128 +1,128 @@
-const NATURAL_MINOR_SCALES = {
-  scales: {
-    1: `
-X: 1
-M: 4/4
-L: 1/8
-K: C minor
-CDEF GABc|BAGF ED C2
-    `,
-    2: `
-X: 1
-M: 4/4
-L: 1/8
-K: C minor
-CDEF GABc|defg abc'b|agfe dcBA|GFED C4
-    `,
-  },
+const getType = (type: string) => {
+  if (type === "major") return type;
+  return "minor";
 };
 
-const HARMONIC_MINOR_SCALES = {
-  scales: {
-    1: `
+const scaleFor = (type: string, octaves: number) => {
+  switch (type) {
+    case "major":
+      switch (octaves) {
+        case 1:
+          return "CDEF GABc|BAGF DE C2";
+        case 2:
+          return "CDEF GABc|defg abc'b|agfe dcBA GFED|C4";
+      }
+      break;
+    case "natural":
+      switch (octaves) {
+        case 1:
+          return "CDEF GABc|BAGF DE C2";
+        case 2:
+          return "CDEF GABc|defg abc'b|agfe dcBA GFED|C4";
+      }
+      break;
+    case "harmonic":
+      switch (octaves) {
+        case 1:
+          return "CDEF GA=Bc|=BAGF DE C2";
+        case 2:
+          return "CDEF GA=Bc|defg a=bc'=b|agfe dc=BA GFED|C4";
+      }
+      break;
+    case "melodic":
+      switch (octaves) {
+        case 1:
+          return "CDEF G=A=Bc|_B_AGF DE C2";
+        case 2:
+          return "CDEF G=A=Bc|defg =a=bc'_b|_agfe dc_B_A GFED|C4";
+      }
+      break;
+  }
+};
+
+const bassScaleFor = (type: string, octaves: number) => {
+  switch (type) {
+    case "major":
+      switch (octaves) {
+        case 1:
+          return "C,D,E,F, G,A,B,C|B,A,G,F, D,E, C,2";
+        case 2:
+          return "C,D,E,F, G,A,B,C|DEFG ABcB|AGFE DCB,A, G,F,E,D,|C,4";
+      }
+      break;
+    case "natural":
+      switch (octaves) {
+        case 1:
+          return "C,D,E,F, G,A,B,C|B,A,G,F, D,E, C,2";
+        case 2:
+          return "C,D,E,F, G,A,B,C|DEFG ABcB|AGFE DCB,A, G,F,E,D,|C,4";
+      }
+      break;
+    case "harmonic":
+      switch (octaves) {
+        case 1:
+          return "C,D,E,F, G,A,=B,C|=B,A,G,F, D,E, C,2";
+        case 2:
+          return "C,D,E,F, G,A,=B,C|DEFG A=Bc=B|AGFE DC=B,A, G,F,E,D,|C,4";
+      }
+      break;
+    case "melodic":
+      switch (octaves) {
+        case 1:
+          return "C,D,E,F, G,=A,=B,C|_B,_A,G,F, D,E, C,2";
+        case 2:
+          return "C,D,E,F, G,=A,=B,C|DEFG =A=Bc_B|_AGFE DC_B,_A, G,F,E,D,|C,4";
+      }
+      break;
+  }
+};
+
+const arpeggioFor = (type: string, octaves: number) => {
+  switch (octaves) {
+    case 1:
+      return "CEG cGE|C3";
+    case 2:
+      return "CEG ceg|c'ge cGE|C3";
+  }
+};
+
+const bassArpeggioFor = (type: string, octaves: number) => {
+  switch (octaves) {
+    case 1:
+      return "C,E,G, CG,E,|C,3";
+    case 2:
+      return "C,E,G, CEG|cGE CG,E,|C,3";
+  }
+};
+
+const toScale = (octaves: number, hands: number, type: string) =>
+  `
 X: 1
 M: 4/4
 L: 1/8
-K: C minor
-CDEF GA=Bc|=BAGF ED C2
-    `,
-    2: `
+K: C ${getType(type)}
+V:
+${scaleFor(type, octaves)}
+${hands === 2 &&
+  `V:2 clef=bass
+${bassScaleFor(type, octaves)}`}
+`;
+
+const toArpeggio = (octaves: number, hands: number, type: string) =>
+  `
 X: 1
 M: 4/4
 L: 1/8
-K: C minor
-CDEF GA=Bc|defg a=bc'=b|agfe dc=BA|GFED C4
-    `,
-  },
-};
+K: C ${getType(type)}
+V:
+${arpeggioFor(type, octaves)}
+${hands === 2 &&
+  `V:2 clef=bass
+${bassArpeggioFor(type, octaves)}`}
+`;
 
-const MELODIC_MINOR_SCALES = {
-  scales: {
-    1: `
-X: 1
-M: 4/4
-L: 1/8
-K: C minor
-CDEF G=A=Bc|=BAGF ED C2
-    `,
-    2: `
-X: 1
-M: 4/4
-L: 1/8
-K: C minor
-CDEF G=A=Bc|defg =a=bc'_b|agfe dc=BA|GFED C4
-    `,
-  },
-};
+export const getScale = (type: string, octaves: number, hands: number) =>
+  toScale(octaves, hands, type);
 
-const MINOR_ARPEGGIOS = {
-  1: `
-X: 1
-M: 6/8
-L: 1/8
-K: C minor
-CEG cGE|C3
-`,
-
-  2: `
-X: 1
-M: 6/8
-L: 1/8
-K: C minor
-CEG ceg|c'ge cGE|C3
-`,
-};
-
-const MAJOR_SCALES = {
-  scales: {
-    1: `
-X: 1
-M: 4/4
-L: 1/8
-K: C
-CDEF GABc|BAGF ED C2
-    `,
-    2: `
-X: 1
-M: 4/4
-L: 1/8
-K: C
-CDEF GABc|defg abc'b|agfe dcBA|GFED C4
-    `,
-  },
-  arpeggios: {
-    1: `
-X: 1
-M: 6/8
-L: 1/8
-K: C
-CEG cGE|C3
-`,
-
-    2: `
-X: 1
-M: 6/8
-L: 1/8
-K: C
-CEG ceg|c'ge cGE|C3
-`,
-  },
-};
-
-const ALL_SCALES: { [key: string]: { [octave: number]: string } } = {
-  major: MAJOR_SCALES.scales,
-  natural: NATURAL_MINOR_SCALES.scales,
-  harmonic: HARMONIC_MINOR_SCALES.scales,
-  melodic: MELODIC_MINOR_SCALES.scales,
-};
-
-const ALL_ARPEGGIOS: { [key: string]: { [octave: number]: string } } = {
-  major: MAJOR_SCALES.arpeggios,
-  minor: MINOR_ARPEGGIOS,
-};
-
-export const getScale = (type: string, octaves: number) =>
-  ALL_SCALES[type][octaves];
-
-export const getArpeggio = (type: string, octaves: number) =>
-  ALL_ARPEGGIOS[type][octaves];
+export const getArpeggio = (type: string, octaves: number, hands: number) =>
+  toArpeggio(octaves, hands, type);
