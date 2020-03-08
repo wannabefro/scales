@@ -49,11 +49,21 @@ const harmonicAndMelodicScales = (
   hands: number = 1,
 ) => ["melodic", "harmonic"].map(type => scale(key, type, octaves, hands));
 
+const chromatic = (key: string, octaves: number, hands: number = 1) => ({
+  key,
+  type: "chromatic",
+  name: `${key} chromatic`,
+  octaves,
+  transpose: convertKeyToTranspose(key),
+  hands,
+});
+
 const SYLLABUS: {
   [key: string]: {
     [key: number]: {
       scales: { meta?: {}; keys: Scale[] };
       arpeggios: { meta?: {}; keys: Scale[] };
+      chromatics?: { meta?: {}; keys: Scale[] };
     };
   };
 } = {
@@ -147,6 +157,48 @@ const SYLLABUS: {
           scale("B flat", "major", 2),
         ],
       },
+    },
+    3: {
+      scales: {
+        meta: {
+          "bowing requirements":
+            "separate bows or slurred (2 quavers to a bow) at examiner's choice.",
+          "rhythm pattern": "even notes or long tonic, at candidate's choice",
+        },
+        keys: [
+          scale("A flat", "major", 1),
+          scale("E flat", "major", 1),
+          scale("E", "major", 1),
+          scale("B flat", "major", 2),
+          scale("D", "major", 2),
+          ...allMinorScales("A", 2),
+          ...allMinorScales("D", 2),
+        ],
+      },
+      arpeggios: {
+        meta: {
+          "bowing requirements": "separate bows or slurred (3 notes to a bow), at examiner’s choice",
+          "rhythmic pattern": "even notes",
+        },
+        keys: [
+          scale("A flat", "major", 1),
+          scale("E flat", "major", 1),
+          scale("E", "major", 1),
+          scale("B flat", "major", 2),
+          scale("D", "major", 2),
+          scale("A", "minor", 2),
+          scale("D", "minor", 2),
+        ],
+      },
+      chromatics: {
+        meta: {
+          "bowing requirements": "separate bows",
+          "rhythmic pattern": "even notes",
+        },
+        keys: [
+          chromatic("D", 1),
+        ]
+      }
     },
   },
 };

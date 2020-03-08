@@ -95,6 +95,22 @@ const bassArpeggioFor = (type: string, octaves: number) => {
   }
 };
 
+const chromaticFor = (transpose: number, octaves: number) => {
+  switch (octaves) {
+    case 1:
+      return "C^CD^D EF^FG|^GA^AB cB_BA|_AG_GF E_ED_D|C4"
+    case 2:
+  }
+}
+
+const bassChromaticFor = (transpose: number, octaves: number) => {
+  switch (octaves) {
+    case 1:
+      return "C^CD^D EF^FG|^GA^AB cB_BA|_AG_GF E_ED_D|C4"
+    case 2:
+  }
+}
+
 const toScale = (octaves: number, hands: number, type: string) =>
   `
 X: 1
@@ -111,7 +127,7 @@ ${bassScaleFor(type, octaves)}` : ''}
 const toArpeggio = (octaves: number, hands: number, type: string) =>
   `
 X: 1
-M: 4/4
+M: 6/8
 L: 1/8
 K: C ${getType(type)}
 V:
@@ -121,8 +137,23 @@ ${hands === 2 ?
 ${bassArpeggioFor(type, octaves)}` : ''}
 `;
 
+const toChromatic = (octaves: number, transpose: number, hands: number) =>
+`
+X: 1
+M: 4/4
+L: 1/8
+K: none
+V:
+${chromaticFor(transpose, octaves)}
+${hands === 2 ?
+  `V:2 clef=bass
+${bassChromaticFor(transpose, octaves)}` : ''}
+`;
+
 export const getScale = (type: string, octaves: number, hands: number) =>
   toScale(octaves, hands, type);
 
 export const getArpeggio = (type: string, octaves: number, hands: number) =>
   toArpeggio(octaves, hands, type);
+
+export const getChromatic = (octaves: number, transpose: number, hands: number) => toChromatic(octaves, transpose, hands);
