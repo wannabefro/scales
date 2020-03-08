@@ -8,7 +8,7 @@ const scaleFor = (type: string, octaves: number) => {
     case "major":
       switch (octaves) {
         case 1:
-          return "CDEF GABc|BAGF DE C2";
+          return "CDEF GABc|BAGF ED C2";
         case 2:
           return "CDEF GABc|defg abc'b|agfe dcBA GFED|C4";
       }
@@ -16,7 +16,7 @@ const scaleFor = (type: string, octaves: number) => {
     case "natural":
       switch (octaves) {
         case 1:
-          return "CDEF GABc|BAGF DE C2";
+          return "CDEF GABc|BAGF ED C2";
         case 2:
           return "CDEF GABc|defg abc'b|agfe dcBA GFED|C4";
       }
@@ -24,7 +24,7 @@ const scaleFor = (type: string, octaves: number) => {
     case "harmonic":
       switch (octaves) {
         case 1:
-          return "CDEF GA=Bc|=BAGF DE C2";
+          return "CDEF GA=Bc|=BAGF ED C2";
         case 2:
           return "CDEF GA=Bc|defg a=bc'=b|agfe dc=BA GFED|C4";
       }
@@ -32,7 +32,7 @@ const scaleFor = (type: string, octaves: number) => {
     case "melodic":
       switch (octaves) {
         case 1:
-          return "CDEF G=A=Bc|_B_AGF DE C2";
+          return "CDEF G=A=Bc|_B_AGF ED C2";
         case 2:
           return "CDEF G=A=Bc|defg =a=bc'_b|_agfe dc_B_A GFED|C4";
       }
@@ -45,7 +45,7 @@ const bassScaleFor = (type: string, octaves: number) => {
     case "major":
       switch (octaves) {
         case 1:
-          return "C,D,E,F, G,A,B,C|B,A,G,F, D,E, C,2";
+          return "C,D,E,F, G,A,B,C|B,A,G,F, E,D, C,2";
         case 2:
           return "C,D,E,F, G,A,B,C|DEFG ABcB|AGFE DCB,A, G,F,E,D,|C,4";
       }
@@ -53,7 +53,7 @@ const bassScaleFor = (type: string, octaves: number) => {
     case "natural":
       switch (octaves) {
         case 1:
-          return "C,D,E,F, G,A,B,C|B,A,G,F, D,E, C,2";
+          return "C,D,E,F, G,A,B,C|B,A,G,F, E,D, C,2";
         case 2:
           return "C,D,E,F, G,A,B,C|DEFG ABcB|AGFE DCB,A, G,F,E,D,|C,4";
       }
@@ -61,7 +61,7 @@ const bassScaleFor = (type: string, octaves: number) => {
     case "harmonic":
       switch (octaves) {
         case 1:
-          return "C,D,E,F, G,A,=B,C|=B,A,G,F, D,E, C,2";
+          return "C,D,E,F, G,A,=B,C|=B,A,G,F, E,D, C,2";
         case 2:
           return "C,D,E,F, G,A,=B,C|DEFG A=Bc=B|AGFE DC=B,A, G,F,E,D,|C,4";
       }
@@ -69,7 +69,7 @@ const bassScaleFor = (type: string, octaves: number) => {
     case "melodic":
       switch (octaves) {
         case 1:
-          return "C,D,E,F, G,=A,=B,C|_B,_A,G,F, D,E, C,2";
+          return "C,D,E,F, G,=A,=B,C|_B,_A,G,F, E,D, C,2";
         case 2:
           return "C,D,E,F, G,=A,=B,C|DEFG =A=Bc_B|_AGFE DC_B,_A, G,F,E,D,|C,4";
       }
@@ -103,9 +103,9 @@ L: 1/8
 K: C ${getType(type)}
 V:
 ${scaleFor(type, octaves)}
-${hands === 2 &&
+${hands === 2 ?
   `V:2 clef=bass
-${bassScaleFor(type, octaves)}`}
+${bassScaleFor(type, octaves)}` : ''}
 `;
 
 const toArpeggio = (octaves: number, hands: number, type: string) =>
@@ -116,9 +116,9 @@ L: 1/8
 K: C ${getType(type)}
 V:
 ${arpeggioFor(type, octaves)}
-${hands === 2 &&
+${hands === 2 ?
   `V:2 clef=bass
-${bassArpeggioFor(type, octaves)}`}
+${bassArpeggioFor(type, octaves)}` : ''}
 `;
 
 export const getScale = (type: string, octaves: number, hands: number) =>
